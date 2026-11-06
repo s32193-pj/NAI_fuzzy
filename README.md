@@ -25,3 +25,6 @@ Example:
 (.venv) telashar@Holo-PC ~/P/WelcomeScreen (main)> python script.py -d pjatk.png 
 ```
 ![analyzed pjatk logo](/assets/Figure_1.png)
+
+Original:
+![unanalyzed pjatk logo](pjatk.png)
