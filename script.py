@@ -8,7 +8,6 @@ import matplotlib.pyplot as plt
 import skfuzzy as fuzzy
 
 
-# parsing environmental variables
 def parsing_arguments():
     parser = argparse.ArgumentParser(
         prog='Image Edge Detector',
@@ -27,7 +26,7 @@ def parsing_arguments():
     return args
 
 
-#load image
+# Zaladowanie obrazu wejsciowego
 def load_image_file(image_path):
     extensions = ['.jpg', '.jpeg', '.png']
     try:
@@ -40,28 +39,28 @@ def load_image_file(image_path):
     return image
 
 
-# detecting edges
+# Wykrywanie krawedzi
 def fuzzy_edges(image,sx=0.1, sy=0.1, n_points=101):
     greyImg = image.convert('L')
     i = np.array(greyImg, dtype=float) / 255.0
 
-    # create gradient filters
+    # Filtry gradientu
     gx = np.array([[-1, 1]])
     gy = np.transpose(gx)
     ix = ndimage.convolve(i, gx, mode='nearest')
     iy = ndimage.convolve(i, gy, mode='nearest')
 
-    # fuzzification
+    # Fuzyfikacja
     mu_x = fuzzy.gaussmf(ix, 0, sx)
     mu_y = fuzzy.gaussmf(iy, 0, sy)
 
-    # Rules
-    # Rule1
+    # Zasady
+    # Zasada1
     r_white = np.fmin(mu_x, mu_y)
-    # Rule2
+    # Zasada2
     r_black = np.fmax(1 - mu_x, 1 - mu_y)
 
-    # Output
+    # Wyjscie
     z = np.linspace(0, 1, n_points)
     white = fuzzy.trimf(z, [0.1, 1, 1])
     black = fuzzy.trimf(z, [0, 0, 0.7])
@@ -70,16 +69,16 @@ def fuzzy_edges(image,sx=0.1, sy=0.1, n_points=101):
     agg = np.fmax(np.fmin(r_white[..., None], white),
                   np.fmin(r_black[..., None], black))
 
-    # Defuzzify using weight center method
+    # Defuzyfikacja uzywajac metody srodka ciezkosci
     ieval = (agg * z).sum(axis=-1) / agg.sum(axis=-1)
     return [ieval,ix,iy,greyImg]
 
-#save edgy image
+# Zapis obrazka (po wykryciu krawedzi)
 def save_edgy_image(edgy_image):
 
     Image.fromarray((edgy_image * 255).astype(np.uint8)).save("output.png")
 
-#display chosen
+# Wyswietlenie wybranych obrazow
 def display_image(args,img,data_set):
 
 
@@ -100,25 +99,27 @@ def display_image(args,img,data_set):
         plt.show()
 
     if args.display:
-        # display fuzzy_edges
+        # Wyswietl obraz (krawedzie)
         plt.figure()
         plt.imshow(data_set[0], cmap='gray')
         plt.title('Ieval')
         plt.show()
 
     if args.colour:
-        # display colour
+        # Wyswietl obraz kolorowy
         plt.figure()
         plt.imshow(img)
         plt.title('Colour image')
         plt.show()
 
     if args.greyscale:
+        # Wyswietl obraz czarno-bialy
         plt.figure()
         plt.imshow(data_set[3], cmap='gray')
         plt.title('Greyscale image')
         plt.show()
-        # display plotted
+
+
     plt.ioff()
     plt.show()
 
