@@ -1,3 +1,4 @@
+# Trybala Piotr i Rudnicki Slawomir
 import argparse
 import os
 import sys
@@ -55,6 +56,7 @@ def fuzzy_edges(image,sx=0.1, sy=0.1, n_points=101):
     mu_y = fuzzy.gaussmf(iy, 0, sy)
 
     # Zasady
+
     # Zasada1
     r_white = np.fmin(mu_x, mu_y)
     # Zasada2
