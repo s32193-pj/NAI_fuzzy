@@ -26,5 +26,5 @@ Example:
 ```
 ![analyzed pjatk logo](/assets/Figure_1.png)
 
-Original:
+Original: <br />
 ![unanalyzed pjatk logo](pjatk.png)
